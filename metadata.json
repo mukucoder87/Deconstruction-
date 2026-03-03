@@ -1,0 +1,5 @@
+{
+  "name": "Logos: Propositional Logic Analyzer",
+  "description": "Analyze text using propositional logic, truth tables, and logical theorems to evaluate validity and coherence.",
+  "requestFramePermissions": []
+}
