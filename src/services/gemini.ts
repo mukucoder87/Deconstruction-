@@ -43,7 +43,7 @@ export interface LogicalAnalysisResult {
 export async function analyzeTextStructure(text: string): Promise<TextBreakdown> {
   const response = await ai.models.generateContent({
     model: 'gemini-3-flash-preview',
-    contents: `Analyze the following text and break it down into sentences, phrases, and words. Also categorize the sentences into premises, arguments, assumptions, and conclusions based on their logical function in the text.\n\nText:\n${text}`,
+    contents: `Analyze the following text and break it down into sentences and phrases. Also categorize the sentences into premises, arguments, assumptions, and conclusions based on their logical function in the text.\n\nText:\n${text}`,
     config: {
       responseMimeType: 'application/json',
       responseSchema: {
@@ -62,11 +62,7 @@ export async function analyzeTextStructure(text: string): Promise<TextBreakdown>
                     type: Type.OBJECT,
                     properties: {
                       id: { type: Type.STRING },
-                      text: { type: Type.STRING },
-                      words: {
-                        type: Type.ARRAY,
-                        items: { type: Type.STRING }
-                      }
+                      text: { type: Type.STRING }
                     }
                   }
                 }
@@ -88,12 +84,25 @@ export async function analyzeTextStructure(text: string): Promise<TextBreakdown>
     }
   });
 
-  return JSON.parse(response.text || '{}') as TextBreakdown;
+  const parsed = JSON.parse(response.text || '{}') as any;
+  
+  // Post-process to add words array client-side to save massive API token generation time
+  if (parsed.sentences) {
+    parsed.sentences = parsed.sentences.map((sentence: any) => ({
+      ...sentence,
+      phrases: (sentence.phrases || []).map((phrase: any) => ({
+        ...phrase,
+        words: phrase.text ? phrase.text.split(/\s+/).filter(Boolean) : []
+      }))
+    }));
+  }
+
+  return parsed as TextBreakdown;
 }
 
 export async function performLogicalAnalysis(sentences: string[]): Promise<LogicalAnalysisResult> {
   const response = await ai.models.generateContent({
-    model: 'gemini-3.1-pro-preview',
+    model: 'gemini-3-flash-preview',
     contents: `Perform a rigorous propositional logic analysis on the following consecutive sentences. 
     1. Convert them into propositional logic symbols (e.g., P, Q, R) and formulas (e.g., P -> Q).
     2. Generate a truth table for these formulas.
