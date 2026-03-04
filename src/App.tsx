@@ -5,7 +5,8 @@ import { BreakdownSection } from './components/BreakdownSection';
 import { CategorizationSection } from './components/CategorizationSection';
 import { LogicalAnalysisSection } from './components/LogicalAnalysisSection';
 import { CorrectionSection } from './components/CorrectionSection';
-import { analyzeTextStructure, performLogicalAnalysis, TextBreakdown, LogicalAnalysisResult } from './services/gemini';
+import { SequenceAnalysisSection } from './components/SequenceAnalysisSection';
+import { analyzeTextStructure, performLogicalAnalysis, analyzeSequenceAndFallacies, TextBreakdown, LogicalAnalysisResult, SequenceAnalysisResult } from './services/gemini';
 
 export default function App() {
   const [inputText, setInputText] = useState('');
@@ -16,6 +17,9 @@ export default function App() {
   const [isAnalyzingLogic, setIsAnalyzingLogic] = useState(false);
   const [logicalAnalysis, setLogicalAnalysis] = useState<LogicalAnalysisResult | null>(null);
 
+  const [isAnalyzingSequence, setIsAnalyzingSequence] = useState(false);
+  const [sequenceAnalysis, setSequenceAnalysis] = useState<SequenceAnalysisResult | null>(null);
+
   const handleAnalyzeStructure = async () => {
     if (!inputText.trim()) return;
     setIsAnalyzingStructure(true);
@@ -24,6 +28,7 @@ export default function App() {
       setTextBreakdown(breakdown);
       setSelectedSentenceIds([]);
       setLogicalAnalysis(null);
+      setSequenceAnalysis(null);
     } catch (error) {
       console.error("Error analyzing structure:", error);
       alert("Failed to analyze the text structure. Please try again.");
@@ -63,6 +68,22 @@ export default function App() {
     }
   };
 
+  const handleAnalyzeSequence = async () => {
+    if (!textBreakdown || textBreakdown.sentences.length === 0) return;
+    setIsAnalyzingSequence(true);
+    try {
+      const analysis = await analyzeSequenceAndFallacies(
+        textBreakdown.sentences.map(s => ({ id: s.id, text: s.text }))
+      );
+      setSequenceAnalysis(analysis);
+    } catch (error) {
+      console.error("Error analyzing sequence:", error);
+      alert("Failed to analyze the sequence. Please try again.");
+    } finally {
+      setIsAnalyzingSequence(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-900 pb-24">
       {/* Header */}
@@ -87,29 +108,39 @@ export default function App() {
         />
 
         {textBreakdown && (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            {/* Left Column: Breakdown & Categorization */}
-            <div className="lg:col-span-5 space-y-8">
-              <BreakdownSection 
-                breakdown={textBreakdown} 
-                selectedSentenceIds={selectedSentenceIds}
-                toggleSentenceSelection={toggleSentenceSelection}
-              />
-              <CategorizationSection categorization={textBreakdown.categorization} />
+          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+              {/* Left Column: Breakdown & Categorization */}
+              <div className="lg:col-span-5 space-y-8">
+                <BreakdownSection 
+                  breakdown={textBreakdown} 
+                  selectedSentenceIds={selectedSentenceIds}
+                  toggleSentenceSelection={toggleSentenceSelection}
+                />
+                <CategorizationSection categorization={textBreakdown.categorization} />
+              </div>
+
+              {/* Right Column: Logical Analysis & Correction */}
+              <div className="lg:col-span-7 space-y-8">
+                <LogicalAnalysisSection 
+                  analysis={logicalAnalysis}
+                  isAnalyzing={isAnalyzingLogic}
+                  onAnalyze={handleAnalyzeLogic}
+                  selectedCount={selectedSentenceIds.length}
+                />
+                {logicalAnalysis && (
+                  <CorrectionSection originalText={inputText} />
+                )}
+              </div>
             </div>
 
-            {/* Right Column: Logical Analysis & Correction */}
-            <div className="lg:col-span-7 space-y-8">
-              <LogicalAnalysisSection 
-                analysis={logicalAnalysis}
-                isAnalyzing={isAnalyzingLogic}
-                onAnalyze={handleAnalyzeLogic}
-                selectedCount={selectedSentenceIds.length}
-              />
-              {logicalAnalysis && (
-                <CorrectionSection originalText={inputText} />
-              )}
-            </div>
+            {/* Full Width: Sequence & Fallacy Analysis */}
+            <SequenceAnalysisSection 
+              analysis={sequenceAnalysis}
+              isAnalyzing={isAnalyzingSequence}
+              onAnalyze={handleAnalyzeSequence}
+              hasSentences={textBreakdown.sentences.length > 0}
+            />
           </div>
         )}
       </main>

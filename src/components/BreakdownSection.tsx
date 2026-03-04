@@ -54,7 +54,10 @@ export function BreakdownSection({ breakdown, selectedSentenceIds, toggleSentenc
                 </button>
                 
                 <div className="flex-1 cursor-pointer" onClick={() => toggleExpand(sentence.id)}>
-                  <p className="text-slate-800 font-medium leading-relaxed">{sentence.text}</p>
+                  <p className="text-slate-800 font-medium leading-relaxed">
+                    <span className="font-bold text-indigo-600 mr-2">[{sentence.id}]</span>
+                    {sentence.text}
+                  </p>
                 </div>
 
                 <button 
