@@ -100,6 +100,14 @@ export default function App() {
       </header>
 
       <main className="max-w-6xl mx-auto px-6 py-8 space-y-8">
+        {/* About the App */}
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 text-center">
+          <h2 className="text-xl font-semibold text-slate-900 mb-3">About the Application</h2>
+          <p className="text-slate-600 leading-relaxed max-w-4xl mx-auto">
+            This application applies <strong>Propositional Calculus</strong> to deconstruct and analyze written text. By translating prose into formal logical structures, it identifies premises, conclusions, contradictions, and fallacies...
+          </p>
+        </div>
+
         <InputSection 
           inputText={inputText} 
           setInputText={setInputText} 
@@ -158,7 +166,7 @@ export default function App() {
                 rel="noopener noreferrer"
                 className="text-indigo-600 hover:text-indigo-800 font-medium transition-colors inline-flex items-center gap-1"
               >
-                Dr. Mukunda Upadhyay <ExternalLink className="w-3 h-3" />
+                Dr.Mukunda Upadhyay <ExternalLink className="w-3 h-3" />
               </a>
             </p>
           </div>

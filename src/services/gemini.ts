@@ -60,7 +60,7 @@ export interface SequenceAnalysisResult {
 export async function analyzeTextStructure(text: string): Promise<TextBreakdown> {
   const response = await ai.models.generateContent({
     model: 'gemini-3-flash-preview',
-    contents: `Analyze the following text and break it down into sentences and phrases. Assign an ID to each sentence strictly in the format S1, S2, S3, etc. Also categorize the sentences into premises, arguments, assumptions, and conclusions based on their logical function in the text. For categorization, prefix each string with its corresponding sentence ID like '[S1] The text...'\n\nText:\n${text}`,
+    contents: `Analyze the following text strictly through the lens of Propositional Calculus (0th-order logic). Break it down into sentences and atomic propositional phrases. Assign an ID to each sentence strictly in the format S1, S2, S3, etc. Categorize the sentences into premises, arguments, assumptions, and conclusions based purely on their logical function as propositional variables and connectives. For categorization, prefix each string with its corresponding sentence ID like '[S1] The text...'\n\nText:\n${text}`,
     config: {
       responseMimeType: 'application/json',
       responseSchema: {
@@ -120,11 +120,12 @@ export async function analyzeTextStructure(text: string): Promise<TextBreakdown>
 export async function performLogicalAnalysis(sentences: string[]): Promise<LogicalAnalysisResult> {
   const response = await ai.models.generateContent({
     model: 'gemini-3-flash-preview',
-    contents: `Perform a rigorous propositional logic analysis on the following consecutive sentences. 
-    1. Convert them into propositional logic symbols (e.g., P, Q, R) and formulas (e.g., P -> Q).
+    contents: `Perform a rigorous propositional logic analysis on the following consecutive sentences. You must strictly use Propositional Calculus (0th-order logic) and avoid informal heuristics. Base your formalization on the foundational works of mathematical logic (e.g., Mendelson's 'Introduction to Mathematical Logic', Enderton's 'A Mathematical Introduction to Logic', Barwise & Etchemendy's 'Language, Proof and Logic', Bell & Machover, Novikov, Rasiowa & Sikorski, and cybernetics/systems theory by Ashby and Leibniz).
+    
+    1. Convert them into propositional logic symbols (e.g., P, Q, R) and formulas (e.g., P -> Q, P ^ Q).
     2. Generate a truth table for these formulas.
-    3. Evaluate the logical validity, reliability, and authenticity.
-    4. Point out any incoherence or logical fallacies (using Modus Ponens, De Morgan's, etc.).
+    3. Evaluate the logical validity, reliability, and authenticity based strictly on truth-functional semantics.
+    4. Point out any incoherence or logical fallacies (using formal propositional rules like Modus Ponens, Modus Tollens, De Morgan's laws, etc.).
     5. Provide recommendations to improve logical consistency.
     
     Sentences to analyze:
@@ -182,11 +183,11 @@ export async function performLogicalAnalysis(sentences: string[]): Promise<Logic
 export async function analyzeSequenceAndFallacies(sentences: {id: string, text: string}[]): Promise<SequenceAnalysisResult> {
   const response = await ai.models.generateContent({
     model: 'gemini-3.1-pro-preview',
-    contents: `Analyze the following sequence of sentences for logical flow, contradictions, and fallacies. Reference standard propositional logic, discrete math foundations, and formal/informal fallacies.
+    contents: `Analyze the following sequence of sentences for logical flow, contradictions, and fallacies strictly using Propositional Calculus. Reference standard propositional logic and discrete math foundations (e.g., Mendelson, Enderton, Barwise, Bell, Buss).
     
-    1. Identify any logical contradictions between sentences.
-    2. Evaluate the choice of order (logical sequence) and point out any structural issues.
-    3. Identify any logical fallacies (e.g., Affirming the Consequent, Denying the Antecedent, Straw Man, Ad Hominem, Non Sequitur, etc.) and specify the exact type.
+    1. Identify any logical contradictions between sentences using truth-functional analysis.
+    2. Evaluate the choice of order (logical sequence) and point out any structural issues in the deduction.
+    3. Identify any logical fallacies (e.g., Affirming the Consequent, Denying the Antecedent) and specify the exact type, focusing on formal propositional fallacies.
     4. Provide an overall assessment of the logical flow.
     
     Sentences to analyze:
