@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrainCircuit } from 'lucide-react';
+import { BrainCircuit, BookOpen, ExternalLink } from 'lucide-react';
 import { InputSection } from './components/InputSection';
 import { BreakdownSection } from './components/BreakdownSection';
 import { CategorizationSection } from './components/CategorizationSection';
@@ -144,6 +144,55 @@ export default function App() {
           </div>
         )}
       </main>
+
+      {/* Footer */}
+      <footer className="max-w-6xl mx-auto px-6 py-12 mt-8 border-t border-slate-200">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div>
+            <h3 className="text-sm font-semibold text-slate-900 mb-3">About the Creator</h3>
+            <p className="text-sm text-slate-600 leading-relaxed">
+              Conceptualized and Designed by{' '}
+              <a 
+                href="https://www.linkedin.com/in/dr-mukunda-upadhyay-692351279/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-indigo-600 hover:text-indigo-800 font-medium transition-colors inline-flex items-center gap-1"
+              >
+                Dr. Mukunda Upadhyay <ExternalLink className="w-3 h-3" />
+              </a>
+            </p>
+          </div>
+          <div>
+            <h3 className="text-sm font-semibold text-slate-900 mb-3">References on Propositional Calculus</h3>
+            <ul className="text-sm text-slate-600 space-y-3">
+              <li>
+                <a href="https://uomustansiriyah.edu.iq/media/lectures/6/6_2017_02_08!01_11_58_AM.pdf" target="_blank" rel="noopener noreferrer" className="hover:text-indigo-600 transition-colors flex items-start gap-2">
+                  <BookOpen className="w-4 h-4 mt-0.5 shrink-0" /> 
+                  <span>Introduction to Propositional Logic (Lectures)</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://idm-lab.org/intro-to-ai/problems/solutions-Propositional_Logic.pdf" target="_blank" rel="noopener noreferrer" className="hover:text-indigo-600 transition-colors flex items-start gap-2">
+                  <BookOpen className="w-4 h-4 mt-0.5 shrink-0" /> 
+                  <span>Propositional Logic Problems & Solutions (IDM Lab)</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.bspublications.net/downloads/056bd715349356_ch_1_Mathematical%20Foundation%20ofComputer%20Science_Satyanarayana.pdf" target="_blank" rel="noopener noreferrer" className="hover:text-indigo-600 transition-colors flex items-start gap-2">
+                  <BookOpen className="w-4 h-4 mt-0.5 shrink-0" /> 
+                  <span>Mathematical Foundation of Computer Science (Ch. 1)</span>
+                </a>
+              </li>
+              <li>
+                <a href="https://www.hansrajcollege.ac.in/hCPanel/uploads/elearning/elearning_document/logic_problemSet.pdf" target="_blank" rel="noopener noreferrer" className="hover:text-indigo-600 transition-colors flex items-start gap-2">
+                  <BookOpen className="w-4 h-4 mt-0.5 shrink-0" /> 
+                  <span>Logic Problem Set (Hansraj College)</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
