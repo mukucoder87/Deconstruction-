@@ -182,7 +182,7 @@ export default function App() {
               <li>
                 <a href="https://idm-lab.org/intro-to-ai/problems/solutions-Propositional_Logic.pdf" target="_blank" rel="noopener noreferrer" className="hover:text-indigo-600 transition-colors flex items-start gap-2">
                   <BookOpen className="w-4 h-4 mt-0.5 shrink-0" /> 
-                  <span>Propositional Logic Problems & Solutions (IDM Lab)</span>
+                  <span>Propositional Logic Problems & Solutions</span>
                 </a>
               </li>
               <li>
@@ -194,7 +194,7 @@ export default function App() {
               <li>
                 <a href="https://www.hansrajcollege.ac.in/hCPanel/uploads/elearning/elearning_document/logic_problemSet.pdf" target="_blank" rel="noopener noreferrer" className="hover:text-indigo-600 transition-colors flex items-start gap-2">
                   <BookOpen className="w-4 h-4 mt-0.5 shrink-0" /> 
-                  <span>Logic Problem Set (Hansraj College)</span>
+                  <span>Logic Problem Set </span>
                 </a>
               </li>
             </ul>
